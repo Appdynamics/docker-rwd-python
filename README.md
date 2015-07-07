@@ -17,7 +17,7 @@ eval "$(docker-machine env dev)"
 
 ## Building
 ```
-git submodule init
+git submodule update --init
 docker build -t appdynamics/rwd-python .
 ```
 
