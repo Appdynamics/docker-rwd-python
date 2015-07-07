@@ -22,7 +22,7 @@ git submodule update --init
 docker build -t appdynamics/rwd-python .
 ```
 
-## Running
+## Running locally
 Setup your environment as defined in ```client/README.md```, then use the
 ```run.sh``` wrapper script to execute the client within Docker:
 
@@ -34,7 +34,7 @@ Setup your environment as defined in ```client/README.md```, then use the
 It is sometimes necessary to log-in to the container in order to see what's
 going on and debug the image. Use the following command to start a container in interactive mode:
 ```
-docker run -i -t IMAGE_NAME /bin/bash
+docker run -i -t appdynamics/rwd-python /bin/bash
 ```
 
 # Running on AWS
@@ -55,4 +55,15 @@ have an ECS cluster named 'sum-dev' and an ECS task named 'rwd-python'.
 TODO: describe the configuration of the AWS task and add parameters to specify
 different cluster and task names
 
+## Running on AWS
+Setup your environment as defined in ```client/README.md```. **NOTE**: this is
+important, as it defines to which Remote WebDriver Server the script running within Docker will be talking to.
 
+Once the environement is setup, use the ```singleurl_ecs.py``` wrapper script to run the Amazon ECS task
+
+```
+./singleurl_ecs.py chrome http://appdynamics.com
+```
+
+# Copyright
+Copyright (c) AppDynamics Inc. 2015
