@@ -5,59 +5,36 @@
 # python-singleurl task defined to run the container
 
 import argparse
+import sys
 import boto3
 import os
 
-assert os.environ.has_key('RWD_URL')
-assert os.environ.has_key('RWD_PORT')
-assert os.environ.has_key('RWD_USERNAME')
-assert os.environ.has_key('RWD_ACCESSKEY')
-
 parser = argparse.ArgumentParser(description='RWD client for single URL measurements')
-parser.add_argument('url')
-parser.add_argument('-b', '--browser', choices=['chrome', 'firefox', 'ie'], required=True)
-parser.add_argument('-s', '--screenshot', default='screenshot.png')
+parser.add_argument('--server-url', required=True)
+parser.add_argument('--test-url', required=True)
+parser.add_argument('--browser', choices=['chrome', 'firefox', 'ie'], required=True)
+parser.add_argument('--screenshot', default='screenshot.png')
+parser.add_argument('--firefox-profile-dir')
+parser.add_argument('browser_args', nargs='*')
 
-args = parser.parse_args()
+parser.parse_args()
+
+command = ['python', 'singleurl.py'] + sys.argv[1:]
 
 ecs = boto3.client('ecs')
 
 response = ecs.run_task(
         cluster='sum-dev',
-        taskDefinition='python-singleurl:1',
+        taskDefinition='python-singleurl:2',
         count=1,
         overrides={
             'containerOverrides': [
                 {
                     'name': 'rwd-python',
-                    'command': [
-                        'python',
-                        'singleurl.py',
-                        '-b',
-                        args.browser,
-                        args.url
-                        ],
-                    'environment': [
-                        {
-                            'name': 'RWD_URL',
-                            'value': os.environ['RWD_URL']
-                            },
-                        {
-                            'name': 'RWD_PORT',
-                            'value': os.environ['RWD_PORT']
-                            },
-                        {
-                            'name': 'RWD_USERNAME',
-                            'value': os.environ['RWD_USERNAME']
-                            },
-                        {
-                            'name': 'RWD_ACCESSKEY',
-                            'value': os.environ['RWD_ACCESSKEY']
-                            },
-                        ]
-                    },
-                ]
-            },)
+                    'command': command,
+                },
+            ]
+        },)
 
 # Waiting for the docker container to stop
 waiter = ecs.get_waiter('tasks_stopped')
