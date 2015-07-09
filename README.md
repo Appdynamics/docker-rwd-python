@@ -27,7 +27,7 @@ Setup your environment as defined in ```client/README.md```, then use the
 ```run.sh``` wrapper script to execute the client within Docker:
 
 ```
-./run python singleurl.py chrome http://appdynamics.com
+./run python singleurl.py --server-url http://user:pass@provider.com:port -b chrome --browser chrome --test-url http://appdynamics.com
 ```
 
 ## Debugging
@@ -56,14 +56,12 @@ TODO: describe the configuration of the AWS task and add parameters to specify
 different cluster and task names
 
 ## Running on AWS
-Setup your environment as defined in ```client/README.md```. **NOTE**: this is
-important, as it defines to which Remote WebDriver Server the script running within Docker will be talking to.
-
-Once the environement is setup, use the ```singleurl_ecs.py``` wrapper script to run the Amazon ECS task
-
 ```
-./singleurl_ecs.py chrome http://appdynamics.com
+python singleurl_ecs.py --server-url http://user:pass@provider.com:port -b chrome --browser chrome --test-url http://appdynamics.com
 ```
 
 # Copyright
-Copyright (c) AppDynamics Inc. 2015
+# Copyright
+Copyright (c) AppDynamics, Inc, and its affiliates  
+2015  
+All rights reserved.
